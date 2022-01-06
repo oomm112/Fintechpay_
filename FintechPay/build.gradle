@@ -5,13 +5,6 @@ plugins {
 }
 
 
-bootJar{
-	archiveBaseName = 'ROOT'
-	archiveFileName = 'ROOT.jar'
-	archiveVersion = "0.0.1"
-}
-
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
