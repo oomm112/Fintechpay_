@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
@@ -46,7 +45,7 @@ public class UserEntity{
 	private String name;
 
 	@Column(name = "resistration_number", length = 20)
-	private String resistration_number;
+	private String resistrationNumber;
 
 	@Column(name = "tel", length = 30)
 	private String tel;
@@ -64,19 +63,19 @@ public class UserEntity{
 
 	//발급받은 토큰
 	@Column(name = "access_token", length = 1000)
-	private String access_token;
+	private String accessToken;
 
 	//발급받은 토큰의 유형 (Bearer고정)
 	@Column(name = "token_type")
-	private String token_type;
+	private String tokenType;
 
 	//발급받은 토큰 만료시간
 	@Column(name = "expires_in")
-	private Integer expires_in;
+	private Integer expiresIn;
 
 	//발급받은 토큰갱신시 필요한 토큰
 	@Column(name = "refresh_token", length = 1000)
-	private String refresh_token;
+	private String refreshToken;
 
 	//발급받은 토큰의 권한
 	@Column(name = "scope")
@@ -84,11 +83,11 @@ public class UserEntity{
 
 	//사용자 일련번호
 	@Column(name = "user_seq_no")
-	private Integer user_seq_no;
+	private Integer userSeqNo;
 
 	//핀테크 유저번호
 	@Column(name = "fintech_number")
-	private String fintech_number;
+	private String fintechNumber;
 	
 	@ManyToMany
 	@JoinTable(

@@ -1,10 +1,7 @@
 package com.fintech.pay.data.dao;
 
 import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
-
-import com.fintech.pay.data.dto.UserTokenDTO;
 
 public interface OpenBankingApiDAO {
 

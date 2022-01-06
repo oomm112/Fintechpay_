@@ -31,8 +31,6 @@ import com.fintech.pay.data.dto.UserDTO;
 import com.fintech.pay.data.entity.UserEntity;
 import com.fintech.pay.service.UserService;
 
-import javassist.bytecode.DuplicateMemberException;
-
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/user")
@@ -76,9 +74,9 @@ public class UserController {
 	@PostMapping(value = "/updateuser")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	public Map<String, String> updateUser(@RequestBody Map<String, String> map) {
-		Map<String, String> response = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
 
-		int response_code = userService.updateUser(map.get("id"), map.get("tel"),map.get("password"));
+		int response_code = userService.updateUser(map.get("id"), map.get("tel"), map.get("password"));
 		if (response_code == 0) {
 			response.put("result", "정상적으로 수정되었습니다");
 		}else {
@@ -93,12 +91,12 @@ public class UserController {
 	@PostMapping(value = "/update")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Map<String, String> updateMyData(@RequestBody Map<String, String> map) {
-		Map<String, String> response = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
 
 		//토큰에 담겨있는 아이디를 가져온다(현재 로그인한 아이디)
 		String id = userService.getMyUserWithAuthorities().get().getId();
 
-		int response_code = userService.updateUser(id, map.get("tel"),map.get("password"));
+		int response_code = userService.updateUser(id, map.get("tel"), map.get("password"));
 		if (response_code == 0) {
 			response.put("result", "정상적으로 수정되었습니다");
 		}else {
@@ -114,7 +112,7 @@ public class UserController {
 	@PostMapping(value = "/delete")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Map<String, String> deleteUser(@RequestBody Map<String, String> map){
-		Map<String, String> response = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
 
 		int response_code = userService.deleteUser(map.get("id"),map.get("password"));
 		if (response_code == 2) {
@@ -128,9 +126,7 @@ public class UserController {
 
 	//UserDTO객체를 파라미터로 받은후 USERservice의 signup메소드 수행
 	@PostMapping("/signup")
-	public ResponseEntity<UserEntity> signup(
-			@Valid @RequestBody UserDTO userDto
-			) throws DuplicateMemberException {
+	public ResponseEntity<UserEntity> signup(@Valid @RequestBody UserDTO userDto) {
 		return ResponseEntity.ok(userService.signup(userDto));
 	}
 
