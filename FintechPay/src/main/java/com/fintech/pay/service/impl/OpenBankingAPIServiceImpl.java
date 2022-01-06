@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.fintech.pay.data.dao.OpenBankingApiDAO;
-import com.fintech.pay.data.dto.UserTokenDTO;
-import com.fintech.pay.data.entity.UserEntity;
 import com.fintech.pay.service.OpenBankingAPIService;
 
 @Service

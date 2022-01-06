@@ -3,7 +3,6 @@ package com.fintech.pay.data.dao.impl;
 import java.util.Collections;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +44,7 @@ public class UserDAOImpl implements UserDAO{
 				.password(passwordEncoder.encode(userDto.getPassword()))
 				.code(null)
 				.name(userDto.getName())
-				.resistration_number(userDto.getResistration_number())
+				.resistrationNumber(userDto.getResistrationNumber())
 				.tel(userDto.getTel())
 				.activated(true)
 				.authorities(Collections.singleton(authority))
@@ -73,7 +72,7 @@ public class UserDAOImpl implements UserDAO{
 		Optional<UserEntity> isUser = userRepository.findOneWithAuthoritiesById(id);
 
 		//만약 id로 조회한 DB값이 없을경우
-		if (isUser == null) {
+		if (isUser.isEmpty()) {
 			return 1;
 		}
 		
@@ -89,7 +88,7 @@ public class UserDAOImpl implements UserDAO{
 				.name(isUser.get().getName())
 				.tel(tel)
 				.activated(true)
-				.resistration_number(isUser.get().getResistration_number())
+				.resistrationNumber(isUser.get().getResistrationNumber())
 				.authorities(isUser.get().getAuthorities())
 				.build();
 
@@ -102,7 +101,7 @@ public class UserDAOImpl implements UserDAO{
 	public int deleteUser(String id, String password) {
 		Optional<UserEntity> isUser = userRepository.findOneWithAuthoritiesById(id);
 		
-		if (isUser == null) {
+		if (isUser.isEmpty()) {
 			return 0;
 		}
 		String isUserPassword = isUser.get().getPassword();

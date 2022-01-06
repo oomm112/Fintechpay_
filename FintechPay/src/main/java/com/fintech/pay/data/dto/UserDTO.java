@@ -36,7 +36,7 @@ public class UserDTO{
 	//정규표현식 이용
 	@NotNull
 	@Pattern(regexp = "\\d{6}\\-[1-4]\\d{6}") 
-	private String resistration_number;
+	private String resistrationNumber;
 
 	//사용자 핸드폰번호
 	//정규표현식이용 ex) 000-0000-0000 형식
@@ -57,5 +57,5 @@ public class UserDTO{
 	private String code;
 	
 	//핀테크 번호
-	private String fintech_number;
+	private String fintechNumber;
 }

@@ -15,20 +15,20 @@ import lombok.Setter;
 @Data
 public class UserTokenDTO {
 	//발급받은 토큰
-	private String access_token;
+	private String accessToken;
 
 	//발급받은 토큰의 유형 (Bearer고정)
-	private String token_type;
+	private String tokenType;
 
 	//발급받은 토큰 만료시간
-	private Integer expires_in;
+	private Integer expiresIn;
 
 	//발급받은 토큰갱신시 필요한 토큰
-	private String refresh_token;
+	private String refreshToken;
 
 	//발급받은 토큰의 권한
 	private String scope;
 
 	//사용자 일련번호
-	private Integer user_seq_no;
+	private Integer userSeqNo;
 }

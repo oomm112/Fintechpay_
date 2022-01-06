@@ -37,7 +37,7 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 	Date today = new Date();
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	String time = dateFormat.format(today);
-	public String bank_tran_id = "M202113689U";
+	String bankTranId = "M202113689U";
 
 	/**
 	 * @param userRepository
@@ -54,11 +54,14 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 	public int addUserCode(String code, String id) {
 		Optional<UserEntity> isUser = userDAO.getUserWithAuthorities(id);
 
+		if (isUser.isEmpty()) {
+			return 1;
+		}
+		
 		//이미 인증을 받아 코드가 존재하는 경우
 		if (isUser.get().getCode() != null) {
 			return 1;
 		}
-		System.out.println(isUser.get().getCode());
 		//정상 등록시 0을 리턴
 		UserEntity userEntity = isUser.get();
 		userEntity.setCode(code);
@@ -96,14 +99,13 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 			return 1;
 		}
 
-		userEntity.setAccess_token(String.valueOf(responseEntity.getBody().get("access_token")));
-		userEntity.setExpires_in(Integer.parseInt(String.valueOf(responseEntity.getBody().get("expires_in"))));
-		userEntity.setRefresh_token(String.valueOf(responseEntity.getBody().get("refresh_token")));
+		userEntity.setAccessToken(String.valueOf(responseEntity.getBody().get("access_token")));
+		userEntity.setExpiresIn(Integer.parseInt(String.valueOf(responseEntity.getBody().get("expires_in"))));
+		userEntity.setRefreshToken(String.valueOf(responseEntity.getBody().get("refresh_token")));
 		userEntity.setScope(String.valueOf(responseEntity.getBody().get("scope")));
-		userEntity.setToken_type(String.valueOf( responseEntity.getBody().get("token_type")));
-		userEntity.setUser_seq_no(Integer.parseInt(String.valueOf(responseEntity.getBody().get("user_seq_no"))));
+		userEntity.setTokenType(String.valueOf( responseEntity.getBody().get("token_type")));
+		userEntity.setUserSeqNo(Integer.parseInt(String.valueOf(responseEntity.getBody().get("user_seq_no"))));
 
-		System.out.println("정상값 + " + userEntity.getAccess_token());
 		userRepository.save(userEntity);
 		return 0;
 	}
@@ -113,7 +115,7 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 	public ResponseEntity<String> getUserme() {
 		Optional<UserEntity> user = userDAO.getMyUserWithAuthorities();
 
-		Integer user_seq_no = user.get().getUser_seq_no();
+		Integer user_seq_no = user.get().getUserSeqNo();
 
 		UriComponents uri =
 				UriComponentsBuilder
@@ -122,7 +124,7 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.build();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer "+user.get().getAccess_token());
+		headers.add("Authorization", "Bearer "+user.get().getAccessToken());
 
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		RestTemplate restTemplate = new RestTemplate();
@@ -134,13 +136,11 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 		//핀테크넘버를 유저DB에 등록해준다.
 		UserEntity userEntity = isUser.get();
 
-		if (isUser.get().getFintech_number() != null) {
-			System.out.println("이미 핀테크 번호가 존재함");
+		if (isUser.get().getFintechNumber() != null) {
 			return response;
 		}
 
 		if (!response.getBody().contains("api_tran_id")) {
-			System.out.println("에러");
 			return response;
 		}
 
@@ -159,9 +159,8 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 			datas.add(gson.fromJson(data.get("fintech_use_num"), String.class));
 		}
 
-		userEntity.setFintech_number(datas.get(0));
+		userEntity.setFintechNumber(datas.get(0));
 		userRepository.save(userEntity);
-		System.out.println("정상등록");
 
 		return response;
 	}
@@ -177,20 +176,18 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 		UriComponents uri =
 				UriComponentsBuilder
 				.fromUriString("https://testapi.openbanking.or.kr/v2.0/account/balance/fin_num")
-				.queryParam("bank_tran_id", bank_tran_id+random)
-				.queryParam("fintech_use_num", user.get().getFintech_number())
+				.queryParam("bank_tran_id", bankTranId+random)
+				.queryParam("fintech_use_num", user.get().getFintechNumber())
 				.queryParam("tran_dtime", time)
 				.build();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer "+user.get().getAccess_token());
+		headers.add("Authorization", "Bearer "+user.get().getAccessToken());
 
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
 	}
 
 
@@ -205,8 +202,8 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 		UriComponents uri =
 				UriComponentsBuilder
 				.fromUriString("https://testapi.openbanking.or.kr/v2.0/account/transaction_list/fin_num")
-				.queryParam("bank_tran_id", bank_tran_id+random)
-				.queryParam("fintech_use_num", user.get().getFintech_number())
+				.queryParam("bank_tran_id", bankTranId+random)
+				.queryParam("fintech_use_num", user.get().getFintechNumber())
 				.queryParam("inquiry_type", inquiry_type)
 				.queryParam("inquiry_base", "D")
 				.queryParam("from_date", from_date)
@@ -217,14 +214,12 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.build();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer "+user.get().getAccess_token());
+		headers.add("Authorization", "Bearer "+user.get().getAccessToken());
 
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
 	}
 
 
@@ -235,20 +230,18 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 		UriComponents uri =
 				UriComponentsBuilder
 				.fromUriString("https://testapi.openbanking.or.kr/v2.0/account/list")
-				.queryParam("user_seq_no", user.get().getUser_seq_no())
+				.queryParam("user_seq_no", user.get().getUserSeqNo())
 				.queryParam("include_cancel_yn", include_cancel_yn)
 				.queryParam("sort_order", sort_order)
 				.build();
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "Bearer "+user.get().getAccess_token());
+		headers.add("Authorization", "Bearer "+user.get().getAccessToken());
 
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri.toUriString(), HttpMethod.GET,entity, Map.class);
 	}
 
 
@@ -266,21 +259,19 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.encode()
 				.toUri();
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("bank_tran_id", bank_tran_id+random);
+		Map<String, Object> map = new HashMap<>();
+		map.put("bank_tran_id", bankTranId+random);
 		map.put("scope", "inquiry");
-		map.put("fintech_use_num", user.get().getFintech_number());
+		map.put("fintech_use_num", user.get().getFintechNumber());
 
 		RequestEntity<Map> requestEntity = RequestEntity
 				.post(uri)
-				.header("Authorization", "Bearer "+user.get().getAccess_token())
+				.header("Authorization", "Bearer "+user.get().getAccessToken())
 				.body(map);
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
 	}
 
 
@@ -295,27 +286,25 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.encode()
 				.toUri();
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("fintech_use_num", fintech_use_num);
 		map.put("account_alias", account_alias);
 
 		RequestEntity<Map> requestEntity = RequestEntity
 				.post(uri)
-				.header("Authorization", "Bearer "+user.get().getAccess_token())
+				.header("Authorization", "Bearer "+user.get().getAccessToken())
 				.body(map);
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
 	}
 
 
 	@Override
 	public ResponseEntity<Map> deleteUser() {
 		Optional<UserEntity> user = userDAO.getMyUserWithAuthorities();
-
+		
 		URI uri =
 				UriComponentsBuilder
 				.fromUriString("https://testapi.openbanking.or.kr/v2.0/user/close")
@@ -323,20 +312,18 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.encode()
 				.toUri();
 
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("client_use_code", "M202113689");
-		map.put("user_seq_no", user.get().getUser_seq_no());
+		map.put("user_seq_no", user.get().getUserSeqNo());
 
 		RequestEntity<Map> requestEntity = RequestEntity
 				.post(uri)
-				.header("Authorization", "Bearer "+user.get().getAccess_token())
+				.header("Authorization", "Bearer "+user.get().getAccessToken())
 				.body(map);
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
 	}
 
 
@@ -354,25 +341,23 @@ public class OpenBankingDAOImpl implements OpenBankingApiDAO{
 				.encode()
 				.toUri();
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("bank_tran_id", bank_tran_id+random);
+		Map<String, Object> map = new HashMap<>();
+		map.put("bank_tran_id", bankTranId+random);
 		map.put("bank_code_std", bank_code_std);
 		map.put("account_num", account_num);
 		//생년월일로 인증 할 수 있도록 구현함.
 		map.put("account_holder_info_type", " ");
 		map.put("account_holder_info", account_holder_info);
 		map.put("tran_dtime", time);
-		System.out.println(map.toString());
+
 		RequestEntity<Map> requestEntity = RequestEntity
 				.post(uri)
-				.header("Authorization", "Bearer "+user.get().getAccess_token())
+				.header("Authorization", "Bearer "+user.get().getAccessToken())
 				.body(map);
-		System.out.println(requestEntity.getHeaders());
+
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<Map> response = restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
-
-		return response;
+		return restTemplate.exchange(uri, HttpMethod.POST,requestEntity, Map.class);
 	}
 
 }

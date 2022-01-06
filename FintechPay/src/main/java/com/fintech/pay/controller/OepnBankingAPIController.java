@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fintech.pay.config.jwt.JwtFilter;
 import com.fintech.pay.data.dao.UserDAO;
-import com.fintech.pay.data.dto.UserTokenDTO;
-import com.fintech.pay.data.entity.UserEntity;
 import com.fintech.pay.service.OpenBankingAPIService;
 
 import io.swagger.annotations.ResponseHeader;
@@ -47,11 +43,11 @@ public class OepnBankingAPIController {
 	@ResponseHeader
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Map<String, String> addUserCode(HttpServletRequest request) {
-		Map<String, String> response = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
 		
 		String code = request.getParameter("code");
 		String id = userDAO.getMyUserWithAuthorities().get().getId();
-		System.out.println(code);
+
 		int response_code = openBankingAPIService.addUserCode(code, id);
 
 		if (response_code == 0) {
@@ -66,7 +62,7 @@ public class OepnBankingAPIController {
 	@PostMapping(value = "/gettoken")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public Map<String, String> getToken(HttpSession httpSession){
-		Map<String, String> response = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
 
 		int response_code = openBankingAPIService.getToken();
 

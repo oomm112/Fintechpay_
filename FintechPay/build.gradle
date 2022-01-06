@@ -4,9 +4,13 @@ plugins {
 	id 'java'
 }
 
-group = 'com.fintech.pay'
-version = '1.0.0'
-sourceCompatibility = '11'
+
+bootJar{
+	archiveBaseName = 'ROOT'
+	archiveFileName = 'ROOT.jar'
+	archiveVersion = "0.0.1"
+}
+
 
 configurations {
 	compileOnly {

@@ -37,7 +37,6 @@ public class TokenProvider implements InitializingBean{
 			@Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
 		this.secret = secret;
 		this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
-		System.out.println(secret + " " + tokenValidityInMilliseconds);
 	}
 	
 	//빈 생성후 의존성 주입받은 후에 secret값을 base64로 decode해서 key변수에 할당해줌

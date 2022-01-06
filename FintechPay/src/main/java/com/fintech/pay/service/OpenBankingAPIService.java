@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
-import com.fintech.pay.data.dto.UserTokenDTO;
-
 public interface OpenBankingAPIService {
 	public int addUserCode(String code, String id);
 
