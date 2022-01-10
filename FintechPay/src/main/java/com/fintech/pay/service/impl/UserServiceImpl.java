@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fintech.pay.data.dao.UserDAO;
+import com.fintech.pay.data.dto.RegiDTO;
 import com.fintech.pay.data.dto.UserDTO;
 import com.fintech.pay.data.entity.UserEntity;
 import com.fintech.pay.service.UserService;
@@ -17,16 +18,17 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService{
 
 	UserDAO userDAO;
-		
+
 	@Autowired
 	public UserServiceImpl(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
 
-	@Override
-	public UserEntity signup(UserDTO userDTO) {
-		return userDAO.signup(userDTO);
+
+	@Override public UserEntity signup(RegiDTO regiDTO) {
+		return userDAO.signup(regiDTO); 
 	}
+
 
 
 	@Override

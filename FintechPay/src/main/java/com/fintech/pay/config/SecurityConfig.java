@@ -22,64 +22,59 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private final TokenProvider tokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-	
 
-    public SecurityConfig(
-            TokenProvider tokenProvider,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
-        this.tokenProvider = tokenProvider;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
-    
-    //PasswordEncoder를 빈객체로 주입
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    //스웨거 인증 필요없이 사용가능 위해
-	@Override
-	public void configure(WebSecurity web) {
-		web
-		.ignoring()
-		.antMatchers(
-				"/swagger-ui.html#/"
-				);
+	public SecurityConfig(
+			TokenProvider tokenProvider,
+			JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+			JwtAccessDeniedHandler jwtAccessDeniedHandler
+			) {
+		this.tokenProvider = tokenProvider;
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
 	}
 
-	 @Override
-	    protected void configure(HttpSecurity httpSecurity) throws Exception {
-	        httpSecurity
-	                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
-	                .csrf().disable()
+	//PasswordEncoder를 빈객체로 주입
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-	                .exceptionHandling()
-	                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-	                .accessDeniedHandler(jwtAccessDeniedHandler)
+	@Override
+	public void configure(WebSecurity web) {
+		web.ignoring().antMatchers("/swagger-ui.html/**", "/swagger/**", "/swagger-resources/**", "/v2/api-docs", "/webjars/**","/swagger-ui/**");
+	}
+	
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+		// token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+		.csrf().disable()
 
-	                // enable h2-console
-	                .and()
-	                .headers()
-	                .frameOptions()
-	                .sameOrigin()
+		.exceptionHandling()
+		.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		.accessDeniedHandler(jwtAccessDeniedHandler)
 
-	                // 세션을 사용하지 않기 때문에 STATELESS로 설정
-	                .and()
-	                .sessionManagement()
-	                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		// enable h2-console
+		.and()
+		.headers()
+		.frameOptions()
+		.sameOrigin()
 
-	                .and()
-	                .authorizeRequests()
-	                .antMatchers("/user/authenticate").permitAll()
-	                .antMatchers("/user/signup").permitAll()
-	                .antMatchers("/openBanking/code").permitAll()
+		// 세션을 사용하지 않기 때문에 STATELESS로 설정
+		.and()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-	                .anyRequest().authenticated()
+		.and()
+		.authorizeRequests()
+		.antMatchers("/user/authenticate").permitAll()
+		.antMatchers("/user/signup").permitAll()
+		.antMatchers("/openBanking/code").permitAll()
 
-	                .and()
-	                .apply(new JwtSecurityConfig(tokenProvider));
-	    }
+		.anyRequest().authenticated()
+
+		.and()
+		.apply(new JwtSecurityConfig(tokenProvider));
+	}
 }

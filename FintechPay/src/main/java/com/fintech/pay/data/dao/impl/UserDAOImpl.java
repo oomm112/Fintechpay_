@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fintech.pay.data.dao.UserDAO;
+import com.fintech.pay.data.dto.RegiDTO;
 import com.fintech.pay.data.dto.UserDTO;
 import com.fintech.pay.data.entity.Authority;
 import com.fintech.pay.data.entity.UserEntity;
@@ -29,29 +30,26 @@ public class UserDAOImpl implements UserDAO{
 	//토큰을 가져오는 메소드
 	//username이 db에 존재치 않으면 Authority와 User정보를 생성 후, UserRepository의 save메소드를 통해 db에 정보를 저장한다.
 	@Transactional
-	public UserEntity signup(UserDTO userDto){
-		if (userRepository.findOneWithAuthoritiesById(userDto.getId()).orElse(null) != null) {
-			throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+	public UserEntity signup(RegiDTO regiDTO){
+		if(userRepository.findOneWithAuthoritiesById(regiDTO.getId()).orElse(null) != null) {
+			throw new RuntimeException("이미 가입되어 있는 유저입니다."); 
 		}
 
 		//일반 가입 유저는 Role_User의 권한을 하나 가지고있다.
-		Authority authority = Authority.builder()
-				.authorityName("ROLE_USER")
-				.build();
+		Authority authority = Authority.builder() .authorityName("ROLE_USER") .build();
 
 		UserEntity userEntity = UserEntity.builder()
-				.id(userDto.getId())
-				.password(passwordEncoder.encode(userDto.getPassword()))
+				.id(regiDTO.getId())
+				.password(passwordEncoder.encode(regiDTO.getPassword()))
 				.code(null)
-				.name(userDto.getName())
-				.resistrationNumber(userDto.getResistrationNumber())
-				.tel(userDto.getTel())
+				.name(regiDTO.getName())
+				.resistrationNumber(regiDTO.getResistrationNumber())
+				.tel(regiDTO.getTel())
 				.activated(true)
 				.authorities(Collections.singleton(authority))
 				.build();
 
-		return userRepository.save(userEntity);
-	}
+		return userRepository.save(userEntity); }
 
 	//id를 기준으로 정보를 가져오는 메소드
 	@Transactional(readOnly = true)
@@ -75,9 +73,9 @@ public class UserDAOImpl implements UserDAO{
 		if (isUser.isEmpty()) {
 			return 1;
 		}
-		
+
 		password = passwordEncoder.encode(password);
-		
+
 		//유저 정보 수정  <패스워드 인코더로 인코딩>
 		//pwd와 tel만 수정 가능.
 		UserEntity userEntity = UserEntity.builder()
@@ -100,7 +98,7 @@ public class UserDAOImpl implements UserDAO{
 	@Transactional
 	public int deleteUser(String id, String password) {
 		Optional<UserEntity> isUser = userRepository.findOneWithAuthoritiesById(id);
-		
+
 		if (isUser.isEmpty()) {
 			return 0;
 		}

@@ -19,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDTO{
+public class RegiDTO{
 	//ID
 	//숫자나 영문자만 사용가능
 	//최대 50글자 까지 가능
@@ -58,12 +58,4 @@ public class UserDTO{
 	@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$")
 	@ApiModelProperty(example = "password")
 	private String password;
-
-	//오픈뱅킹api의 인증코드
-	@ApiModelProperty(value="인증코드")
-	private String code;
-	
-	//핀테크 번호
-	@ApiModelProperty(value="핀테크번호")
-	private String fintechNumber;
 }

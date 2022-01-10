@@ -4,6 +4,13 @@ plugins {
 	id 'java'
 }
 
+group = 'fintech'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '14'
+apply plugin: 'war'
+
+bootWar.enabled = false
+war.enabled = true
 
 configurations {
 	compileOnly {
@@ -16,14 +23,16 @@ repositories {
 }
 
 dependencies {
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	implementation 'org.javassist:javassist'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	//Swagger 2.9.2
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2' 
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'com.google.code.gson', name: 'gson'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'

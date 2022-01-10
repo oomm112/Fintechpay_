@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fintech.pay.data.dao.UserDAO;
 import com.fintech.pay.service.OpenBankingAPIService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ResponseHeader;
 
 @RestController
 @RequestMapping("/openBanking")
+@Api(tags = {"오픈뱅킹 관련 메소드"})
 public class OepnBankingAPIController {
 
 	private final OpenBankingAPIService openBankingAPIService;
@@ -42,6 +45,7 @@ public class OepnBankingAPIController {
 	@GetMapping(value = "/code")
 	@ResponseHeader
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="코드 발급")
 	public Map<String, String> addUserCode(HttpServletRequest request) {
 		Map<String, String> response = new HashMap<>();
 		
@@ -61,6 +65,7 @@ public class OepnBankingAPIController {
 	//오픈뱅킹을 사용하기위한 토큰을 발급받는 메소드
 	@PostMapping(value = "/gettoken")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="토큰 발급")
 	public Map<String, String> getToken(HttpSession httpSession){
 		Map<String, String> response = new HashMap<>();
 
@@ -78,6 +83,7 @@ public class OepnBankingAPIController {
 	//사용자 조회 (돌아온 값 중, 핀테크 값만 DB에 등록해준다)
 	@GetMapping(value = "/userme")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="사용자 조회 및 핀테크 번호 등록")
 	public ResponseEntity<String> getUserme(){
 		return openBankingAPIService.getUserme();
 	}
@@ -85,6 +91,7 @@ public class OepnBankingAPIController {
 	//잔액조회
 	@GetMapping(value = "/balance")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="잔액 조회")
 	public ResponseEntity<Map> getBalance(){
 		return openBankingAPIService.getBalance();
 	}
@@ -92,6 +99,7 @@ public class OepnBankingAPIController {
 	//거래내역조회
 	@GetMapping(value = "/transaction")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="거래내역 조회")
 	public ResponseEntity<Map> getTransaction(@RequestParam String inquiry_type, @RequestParam String from_date,
 			@RequestParam String to_date,@RequestParam String sort_order){
 		return openBankingAPIService.getTransaction(inquiry_type, from_date, to_date, sort_order);
@@ -99,6 +107,7 @@ public class OepnBankingAPIController {
 	
 	//등록계좌조회
 	@GetMapping(value = "/account")
+	@ApiOperation(value="등록 계좌조회")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ResponseEntity<Map> getAccount(@RequestParam String sort_order, @RequestParam String include_cancel_yn){
 		return openBankingAPIService.getAccount(sort_order, include_cancel_yn);
@@ -106,6 +115,7 @@ public class OepnBankingAPIController {
 	
 	//등록계좌해지
 	@PostMapping(value = "/account/cancel")
+	@ApiOperation(value="등록 계좌해지")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ResponseEntity<Map> deleteAccount(){
 		return openBankingAPIService.deleteAccount();
@@ -114,6 +124,7 @@ public class OepnBankingAPIController {
 	//계좌 정보 변경 (관리자용)
 	@PostMapping(value = "/account/update")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@ApiOperation(value="계좌정보변경")
 	public ResponseEntity<Map> updateAccount(@RequestBody Map<String, String> map){
 		String fintech_use_num = map.get("fintech_use_num");
 		String account_alias = map.get("account_alias");
@@ -124,6 +135,7 @@ public class OepnBankingAPIController {
 	//사용자 탈퇴
 	@PostMapping(value = "/user/delete")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	@ApiOperation(value="사용자 탈퇴")
 	public ResponseEntity<Map> deleteUser(){
 		return openBankingAPIService.deleteUser();
 	}
@@ -131,6 +143,7 @@ public class OepnBankingAPIController {
 	//계좌실명조회 (관리자용)
 	@PostMapping(value = "/user/real")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	@ApiOperation(value="계좌실명조회[관리자용]")
 	public ResponseEntity<Map> getRealname(@RequestBody Map<String, String> map){
 		String bank_code_std = map.get("bank_code_std");
 		String account_num = map.get("account_num");
@@ -142,6 +155,4 @@ public class OepnBankingAPIController {
 	//입금 이체
 	
 	//출금 이체
-	
-	//수취 조회
 }

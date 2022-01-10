@@ -2,12 +2,12 @@ package com.fintech.pay.data.dao;
 
 import java.util.Optional;
 
-import com.fintech.pay.data.dto.UserDTO;
+import com.fintech.pay.data.dto.RegiDTO;
 import com.fintech.pay.data.entity.UserEntity;
 
 public interface UserDAO {
 	//회원가입
-	UserEntity signup(UserDTO userDto);
+	UserEntity signup(RegiDTO regiDTO);
 
 	//유저정보조회 (관리자용)
 	Optional<UserEntity> getMyUserWithAuthorities();
