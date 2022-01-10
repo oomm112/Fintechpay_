@@ -32,6 +32,7 @@ http://52.78.62.73:8080/swagger-ui.html#/
 
 # 관리자 계정
  id : admin
+ 
  password : admin112^@
 
 # UseDependencies
