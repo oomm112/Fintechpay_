@@ -9,12 +9,18 @@ RestAPI방식을 사용하며, JPA와 JWT를 사용하여 보안까지 갖추어
 
 
 # UseSkills
-1.SpringBoot ( Gradle ver.11) 이용 \n
-2.MariaDB \n
-3.JPA \n
-4.JWT \n
-5.스프링 시큐리티 \n
-6.Resttemplate 방식 오픈 api의 기능 구현 \n
+1.SpringBoot ( Gradle ver.11) 이용 
+
+2.MariaDB
+
+3.JPA 
+
+4.JWT 
+
+5.스프링 시큐리티 
+
+6.Resttemplate 방식 오픈 api의 기능 구현 
+
 7.AWS(EC2)를 사용하여 WAR파일로 배포
 
 
