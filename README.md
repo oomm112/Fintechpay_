@@ -15,12 +15,14 @@ RestAPI방식을 사용하며, JPA와 JWT를 사용하여 보안까지 갖추어
 4.JWT
 5.스프링 시큐리티
 6.Resttemplate 방식 오픈 api의 기능 구현
+7.AWS(EC2)를 사용하여 WAR파일로 배포
 
 
 # UseIDE  
 Eclipse
 
-
+# Swagger URI
+http://52.78.62.73:8080/swagger-ui.html#/
 
 # UseDependencies
   1.Lombok
@@ -29,6 +31,7 @@ Eclipse
   4.spring security
   5.jwt
   6.jackson
+  7.Swagger
   
   
 # 패키지 구조
