@@ -47,9 +47,9 @@ public class SwaggerConfiguration implements WebMvcConfigurer{
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				.title("핀테크페이 클론코딩")
-				.description("만약 내가 핀테크페이를 만든다면? 이라는 생각으로 클론코딩을 해봤습니다.\n AWS EC2를 이용하여 호스팅 하였습니다.\n <개인 프로젝트>\n Github : https://github.com/oomm112/Fintechpay_"
+				.description("만약 내가 핀테크페이를 만든다면? 이라는 생각으로 클론코딩을 해봤습니다.\n\n AWS EC2를 이용하여 호스팅 하였습니다.\n <개인 프로젝트>\n Github : https://github.com/oomm112/Fintechpay_"
 						+ "\n-사용자인증 uri-\r\n"
-						+ "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=6cc9ec2e-52e9-473a-a392-4a783fed7443&redirect_uri=http%3A%2F%2Flocalhost%3A9099%2FopenBanking%2Fcode&scope=login%20inquiry%20transfer&client_info=test&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY&auth_type=0&cellphone_cert_yn=Y&authorized_cert_yn=Y&account_hold_auth_yn=N&register_info=A")
+						+ "https://twww.openbanking.or.kr/apt/mobileweb/authorizeNewGW?sessionID=a1618ba4-affa-416a-aa5d-7a59198bf612&action=Grant&api_tran_id=99c09294-788e-4ba2-bd15-9cce056de7f6&gw_svc_id=faf66bd6cafdf009a37caaac77ba5194&gw_app_key=6cc9ec2e-52e9-473a-a392-4a783fed7443&response_type=code&client_id=6cc9ec2e-52e9-473a-a392-4a783fed7443&client_info=test&redirect_uri=http://52.78.62.73:8080/openBanking/code&scope=login+inquiry+transfer&auth_type=0&lang=kor&state=b80BLsfigm9OokPTjy03elbJqRHOfGSY&account_hold_auth_yn=N&register_info=A&authorized_cert_yn=Y&cellphone_cert_yn=Y ")
 				.version("1.0.0")
 				.build();
 	}

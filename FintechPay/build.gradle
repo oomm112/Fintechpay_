@@ -6,7 +6,7 @@ plugins {
 
 group = 'fintech'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '14'
+sourceCompatibility = '17'
 apply plugin: 'war'
 
 bootWar.enabled = false
