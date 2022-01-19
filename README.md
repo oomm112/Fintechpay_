@@ -34,6 +34,11 @@ http://52.78.62.73:8080/swagger-ui.html#/
  id : admin
  
  password : admin112^@
+ 
+ # 유저 계정
+ id : oomm113
+ 
+ password : oomm115^@
 
 # UseDependencies
   1.Lombok
