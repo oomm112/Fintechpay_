@@ -29,7 +29,6 @@ Eclipse
 
 # Swagger URI
 http://52.78.62.73:8080/swagger-ui.html#/
-[수정중]
 
 # 관리자 계정
  id : admin
