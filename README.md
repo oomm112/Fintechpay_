@@ -29,7 +29,6 @@ RestAPI방식을 사용하며, JPA와 JWT를 사용하여 보안까지 갖추어
 Eclipse
 
 # Swagger URI
-http://52.78.62.73:8080/swagger-ui.html#/
 현재 AWS클라우드 프리티어 종료로 닫아놨습니다.
 
 # 관리자 계정
